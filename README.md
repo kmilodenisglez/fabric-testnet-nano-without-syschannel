@@ -1,4 +1,4 @@
-# Test network - Nano bash
+# Fabric test network - Nano bash - + Without a __system channel__ +
 
 Based on fabric-samples/test-network-nano-bash, but without using __system channel__.
 
