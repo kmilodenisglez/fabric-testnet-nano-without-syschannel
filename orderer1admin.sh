@@ -10,13 +10,6 @@ export OSN_TLS_CA_ROOT_CERT=["${PWD}"/crypto-config/ordererOrganizations/example
 export ADMIN_TLS_SIGN_CERT="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
 export ADMIN_TLS_PRIVATE_KEY="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
 
-#export ORDERER_ADMIN_TLS_ENABLED=true
-#export ORDERER_ADMIN_TLS_PRIVATEKEY="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
-#export ORDERER_ADMIN_TLS_CERTIFICATE="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
-#export ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED=true
-#export ORDERER_ADMIN_TLS_CLIENTROOTCAS=["${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt]
-#export ORDERER_CHANNELPARTICIPATION_ENABLED=true
-
 # using osnadmin binary to handle the channel joining for the orderer
 
 # inspect channels configuration in the orderer

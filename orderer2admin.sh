@@ -6,12 +6,9 @@ export FABRIC_CFG_PATH="${PWD}"
 
 export FABRIC_LOGGING_SPEC=debug:cauthdsl,policies,msp,common.configtx,common.channelconfig=info
 export ORDERER_ADMIN_LISTENADDRESS=127.0.0.1:9444
-export ORDERER_ADMIN_TLS_ENABLED=true
-export ORDERER_ADMIN_TLS_PRIVATEKEY="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.key
-export ORDERER_ADMIN_TLS_CERTIFICATE="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-export ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED=true
-export ORDERER_ADMIN_TLS_CLIENTROOTCAS=["${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/ca.crt]
-export ORDERER_CHANNELPARTICIPATION_ENABLED=true
+export OSN_TLS_CA_ROOT_CERT=["${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/ca.crt]
+export ADMIN_TLS_SIGN_CERT="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+export ADMIN_TLS_PRIVATE_KEY="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.key
 
 # using osnadmin binary to handle the channel joining for the orderer
 # inspect channel configuration in the orderer
