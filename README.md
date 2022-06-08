@@ -89,6 +89,7 @@ export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd681
 In another terminal, navigate to chaincode ex: `fabric-samples/asset-transfer-basic/chaincode-external` and build the chaincode:
 
 ```
+# linux or darwin
 go build -o ccass_binary
 
 # windows

@@ -1,9 +1,10 @@
 #!/usr/bin/env sh
 
 # look for binaries in local dev environment /build/bin directory and then in local samples /bin directory
-export PATH="${PWD}"/../../fabric/build/bin:"${PWD}"/../bin:"$PATH"
+export PATH="${PWD}"/../bin:"$PATH"
 export FABRIC_CFG_PATH="${PWD}"/../config
 
+export CHANNEL_NAME=mychannel
 export FABRIC_LOGGING_SPEC=INFO
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_TLS_ROOTCERT_FILE="${PWD}"/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
