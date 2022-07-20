@@ -27,6 +27,10 @@ The path must be absolute or relative to where the peer will run so that it can 
 
 # Instructions for starting network
 
+## with multiple ordering nodes
+
+Antes debe remplazar el contenido del fichero `configtx.yaml` por `configtx-multiple-orderingnodes.yaml`. 
+
 Open terminal windows for 3 ordering nodes, 4 peer nodes, and 4 peer admins as seen in the following terminal setup. The first two peers and peer admins belong to Org1, the latter two peer and peer admins belong to Org2.
 Note, you can start with two ordering nodes and a single Org1 peer node and single Org1 peer admin terminal if you would like to keep things even more minimal (two ordering nodes are required to achieve consensus (2 of 3), while a single peer from Org1 can be utilized since the endorsement policy is set as any single organization).
 ![Terminal setup](terminal_setup.png)
