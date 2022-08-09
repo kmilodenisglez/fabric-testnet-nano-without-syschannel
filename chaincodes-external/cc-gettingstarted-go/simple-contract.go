@@ -8,7 +8,7 @@ import (
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
-// contrato SimpleContract para manejar escritura y lectura desde el world-state
+// SimpleContract para manejar escritura y lectura desde el world-state
 type SimpleContract struct {
 	contractapi.Contract
 }
