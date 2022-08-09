@@ -6,10 +6,10 @@ Use the same structure as test-network-nano-bash, see [test-network-nano-bash](h
 
 # Prereqs
 
-## Download fabric-samples and fabric binaries<a name="fabconnect_testnetwork_download_prerequisites"></a>
+## Download fabric binaries <a name="fabconnect_testnetwork_download_prerequisites"></a>
 
 ```bash
-cd $HOME
+mkdir fabric-folder
 ```
 To get the install script:
 
@@ -19,23 +19,19 @@ curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/ins
 
 Run the script:
 ```bash
-./install-fabric.sh -f 2.4.4 b s
+./install-fabric.sh -f 2.4.4 b
 ```
-> **NOTE**: These arguments download the `Fabric Images` 2.4.4 version, clone the `fabric-samples` repository, and download the `Fabric binaries`.
+> **NOTE**: These arguments download the `Fabric binaries`.
 
-[Visit this link for better instructions...](https://hyperledger-fabric.readthedocs.io/en/latest/install.html)
+[Visit this link for more instructions...](https://hyperledger-fabric.readthedocs.io/en/latest/install.html)
 
 ## To run the chaincode as a service
-- You need to have the `ccaas_builder` binaries. If you do not have them in `fabric-samples/bin` you can build them from the Fabric source with the command `make ccaasbuilder`, you will then find the builder in `fabric/release/darwin-amd64/bin` or equivalent for your system. Just move the whole hierarchy starting there to `fabric-samples/bin` with something like: `mv release/darwin-amd64/bin/ccaas_builder ../fabric-samples/bin`
-- You need to edit the `fabric-samples/config/core.yaml` file to point to that builder. The path specified in the default config file is only valid within the peer container which you won't be using. Modify the `externalBuilders` field in the `core.yaml` file to add the local external builder so that the configuration looks something like the following:
+- You need to have the `ccaas_builder` binaries. If you do not have them in `fabric-folder/bin` you can build them from the Fabric source with the command `make ccaasbuilder`, you will then find the builder in `fabric/release/darwin-amd64/bin` or equivalent for your system. Just move the whole hierarchy starting there to `fabric-folder/bin` with something like: `mv release/darwin-amd64/bin/ccaas_builder ../fabric-folder/bin`
+- You need to edit the `fabric-folder/config/core.yaml` file to point to that builder. The path specified in the default config file is only valid within the peer container which you won't be using. Modify the `externalBuilders` field in the `core.yaml` file to add the local external builder so that the configuration looks something like the following:
 ```
 externalBuilders:
        - name: ccaas_builder
          path: ../bin/ccaas_builder
-         propagateEnvironment:
-           - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG
-       - name: other_ccaas_builder
-         path: /opt/hyperledger/ccaas_builder
          propagateEnvironment:
            - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG
 ```
@@ -43,11 +39,11 @@ The path must be absolute or relative to where the peer will run so that it can 
 
 # Instructions for starting network
 
-👀 Note, by default you can start with a single OSN and a single Org1 peer node and single Org1 peer admin terminal if you would like to keep things even more minimal (a single peer from Org1 can be utilized since the endorsement policy is set as any single organization).
+👀 Note, by default you can start with a single ordering service node (OSN) and a single Org1 peer node and single Org1 peer admin terminal if you would like to keep things even more minimal (a single peer from Org1 can be utilized since the endorsement policy is set as any single organization).
 
 > For several orderer nodes: Replace the `configtx.yaml` with `configtx-multiple-orderingnodes.yaml`.
 
-Open terminal windows for 1 ordering node (OSN), 1 peer node, and 1 peer admin as seen in the following terminal setup. The peer and peer admin belong to Org1.
+Open terminal windows for 1 OSN, 1 peer node, and 1 peer admin as seen in the following terminal setup. The peer and peer admin belong to Org1.
 
 ![Terminal setup](terminal_setup.png)
 
@@ -55,7 +51,7 @@ The following instructions will have you run simple bash scripts that set enviro
 The scripts contain only simple single-line commands so that they are easy to read and understand.
 If you have trouble running bash scripts in your environment, you can just as easily copy and paste the individual commands from the script files instead of running the script files.
 
-- cd to the `test-network-optativo-nanobash` directory in each terminal window
+- cd to the `fabric-testnet-nano-without-syschannel` directory in each terminal window
 - In the orderer terminal, run `./generate_artifacts.sh` to generate crypto material (calls cryptogen) and system and application channel genesis block and configuration transactions (calls configtxgen). The artifacts will be created in the `crypto-config` and `channel-artifacts` directories.
 - Run `./orderer1.sh`
 - In the admin terminal, run `./orderer1admin.sh`
@@ -103,12 +99,16 @@ Package ID: basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2
 Copy the returned chaincode package ID into an environment variable for use in subsequent commands (your ID may be different):
 
 ```
+# in linux, wsl and darwin use export, ex:
 export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
+
+# in windows terminal use set, ex:
+set CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
 ```
 
 In another terminal, navigate to chaincode ex: `chaincodes-external/cc-assettransfer-go` and build the chaincode:
 
-```
+```bash
 # linux or darwin
 go build -o ccass_binary
 
@@ -116,19 +116,9 @@ go build -o ccass_binary
 go build -o ccass_binary.exe
 ```
 
-Set the chaincode package ID again (this is a different terminal):
-
-```
-export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
-
-# in windows use set, ex:
-
-set CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
-```
-
 Set the chaincode server address:
 
-```
+```bash
 export CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
 
 # windows
@@ -137,7 +127,7 @@ set CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
 
 And start the chaincode service:
 
-```
+```bash
 # linux
 ./ccass_binary
 
@@ -145,7 +135,13 @@ And start the chaincode service:
 ccass_binary.exe
 ```
 
-## Activate the chaincode
+## Approve and commit the chaincode
+
+Set the chaincode package ID again (this is a different terminal):
+
+```bash
+export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
+```
 
 Using the peer1 admin, approve and commit the chaincode (only a single approver is required based on the lifecycle endorsement policy of any organization):
 

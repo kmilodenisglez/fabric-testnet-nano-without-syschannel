@@ -1,3 +1,4 @@
 *.tar.gz
 *.tgz
 crypto/*.pem
+/cc-assettransfer-go
