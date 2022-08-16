@@ -23,12 +23,12 @@ Run the script:
 ```
 > **NOTE**: These arguments download the `Fabric binaries`.
 
+If you want to know more about the install-fabric.sh script visit the following link [install script](https://hyperledger-fabric.readthedocs.io/en/latest/install.html)
+
 Clone this repo:
 ```bash
 git clone https://github.com/kmilodenisglez/fabric-testnet-nano-without-syschannel.git
 ```
-
-[Visit this link for more instructions...](https://hyperledger-fabric.readthedocs.io/en/latest/install.html)
 
 ## To run the chaincode as a service
 - You need to have the `ccaas_builder` binaries. If you do not have them in `fabric-folder/bin` you can build them from the Fabric source with the command `make ccaasbuilder`, you will then find the builder in `fabric/release/darwin-amd64/bin` or equivalent for your system. Just move the whole hierarchy starting there to `fabric-folder/bin` with something like: `mv release/darwin-amd64/bin/ccaas_builder ../fabric-folder/bin`
