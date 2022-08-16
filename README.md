@@ -95,7 +95,7 @@ Export the environment variables in the terminal, only if it has not been done:
 ```bash
 source ./setenv.sh
 ```
-> **setenv script:** Note the syntax of running the scripts. The setenv.sh scripts run with the `source` command in order to source the script files in the respective shells. This is important so that the exported environment variables can be utilized by any subsequent user commands. In order to use commands like the `peer`.
+> Note the syntax of running the scripts. The setenv.sh scripts run with the `source` command in order to source the script files in the respective shells. This is important so that the exported environment variables can be utilized by any subsequent user commands. In order to use commands like the `peer`.
 
 Install the `cc-assettransfer-go` chaincode
 ```bash
