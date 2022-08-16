@@ -23,6 +23,11 @@ Run the script:
 ```
 > **NOTE**: These arguments download the `Fabric binaries`.
 
+Clone this repo:
+```bash
+git clone https://github.com/kmilodenisglez/fabric-testnet-nano-without-syschannel.git
+```
+
 [Visit this link for more instructions...](https://hyperledger-fabric.readthedocs.io/en/latest/install.html)
 
 ## To run the chaincode as a service
