@@ -9,7 +9,7 @@ Use the same structure as test-network-nano-bash, see [test-network-nano-bash](h
 ## Download fabric binaries <a name="fabconnect_testnetwork_download_prerequisites"></a>
 
 ```bash
-mkdir fabric-folder
+mkdir fabric-folder && cd fabric-folder
 ```
 To get the install script:
 
