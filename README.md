@@ -97,6 +97,8 @@ Export the environment variables in the terminal, only if it has not been done:
 ```bash
 source ./setenv.sh
 ```
+> **setenv script:** In order to use commands like the `peer`.
+
 Install the `cc-assettransfer-go` chaincode
 ```bash
 peer lifecycle chaincode install chaincodes-external/cc-assettransfer-go/external-chaincode.tgz
