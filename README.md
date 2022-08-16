@@ -38,8 +38,8 @@ git clone https://github.com/kmilodenisglez/fabric-testnet-nano-without-syschann
 - You need to edit the `fabric-folder/config/core.yaml` file to point to that builder. The path specified in the default config file is only valid within the peer container which you won't be using. Modify the `externalBuilders` field in the `core.yaml` file to add the local external builder so that the configuration looks something like the following:
 ```
 externalBuilders:
-       - name: ccaas_builder
-         path: ../bin/ccaas_builder
+       - name: ccaas
+         path: ../builders/ccaas
          propagateEnvironment:
            - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG
 ```
@@ -80,16 +80,25 @@ To deploy and invoke the chaincode, utilize the peer1 admin terminal that you ha
 
 Package and install the external chaincode on peer1 with the following simple commands:
 
-```
+Package:
+```bash
 cd chaincodes-external/cc-assettransfer-go
 
 tar cfz code.tar.gz connection.json
 tar cfz external-chaincode.tgz metadata.json code.tar.gz
+```
 
+Return to the root of the project:
+```bash
 cd ../..
+```
 
+Export the environment variables in the terminal, only if it has not been done:
+```bash
 source ./setenv.sh
-
+```
+Install the `cc-assettransfer-go` chaincode
+```bash
 peer lifecycle chaincode install chaincodes-external/cc-assettransfer-go/external-chaincode.tgz
 ```
 
