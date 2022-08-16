@@ -65,9 +65,7 @@ If you have trouble running bash scripts in your environment, you can just as ea
 - In the admin terminal, run `./orderer1admin.sh`
 - In the peer terminal, run `./peer1.sh`
 - Note that each orderer and peer write their data (including their ledgers) to their own subdirectory under the `data` directory
-- In the admin terminal, run `source peer1admin.sh`
-
-Note the syntax of running the scripts. The peer admin scripts run with the `source` command in order to source the script files in the respective shells. This is important so that the exported environment variables can be utilized by any subsequent user commands.
+- In the admin terminal, run `./peer1admin.sh`
 
 The `peer1admin.sh` script sets the peer1 admin environment variables, creates the application channel `mychannel`, updates the channel configuration for the org1 gossip anchor peer, and joins peer1 to `mychannel`.
 The remaining peer admin scripts join their respective peers to `mychannel`.
@@ -97,7 +95,7 @@ Export the environment variables in the terminal, only if it has not been done:
 ```bash
 source ./setenv.sh
 ```
-> **setenv script:** In order to use commands like the `peer`.
+> **setenv script:** Note the syntax of running the scripts. The setenv.sh scripts run with the `source` command in order to source the script files in the respective shells. This is important so that the exported environment variables can be utilized by any subsequent user commands. In order to use commands like the `peer`.
 
 Install the `cc-assettransfer-go` chaincode
 ```bash
