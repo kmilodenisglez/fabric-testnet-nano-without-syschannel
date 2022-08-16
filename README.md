@@ -19,7 +19,7 @@ curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/ins
 
 Run the script:
 ```bash
-./install-fabric.sh -f 2.4.4 b
+./install-fabric.sh -f 2.4.6 b
 ```
 > **NOTE**: These arguments download the `Fabric binaries`.
 
@@ -31,7 +31,10 @@ git clone https://github.com/kmilodenisglez/fabric-testnet-nano-without-syschann
 ```
 
 ## To run the chaincode as a service
+> **The (ccaas) builder release** Since Fabric version 2.4.6 the chaincode-as-a-service (ccaas) builder release is available.
+
 - You need to have the `ccaas_builder` binaries. If you do not have them in `fabric-folder/bin` you can build them from the Fabric source with the command `make ccaasbuilder`, you will then find the builder in `fabric/release/darwin-amd64/bin` or equivalent for your system. Just move the whole hierarchy starting there to `fabric-folder/bin` with something like: `mv release/darwin-amd64/bin/ccaas_builder ../fabric-folder/bin`
+
 - You need to edit the `fabric-folder/config/core.yaml` file to point to that builder. The path specified in the default config file is only valid within the peer container which you won't be using. Modify the `externalBuilders` field in the `core.yaml` file to add the local external builder so that the configuration looks something like the following:
 ```
 externalBuilders:
