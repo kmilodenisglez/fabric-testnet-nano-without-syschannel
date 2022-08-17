@@ -72,7 +72,7 @@ The remaining peer admin scripts join their respective peers to `mychannel`.
 
 # Instructions for deploying and running the basic asset transfer sample go chaincode as a service
 
-To deploy and invoke the chaincode, utilize the peer1 admin terminal that you have created in the prior steps. You have two possibilities:
+To deploy and invoke the chaincode, utilize the peer1 admin terminal that you have created in the prior steps.
 
 ## 1. Running the chaincode as a service
 
