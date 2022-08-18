@@ -152,6 +152,11 @@ And start the chaincode service:
 ccass_binary.exe
 ```
 
+## Set chaincode name 
+```bash
+export CC_NAME=basic
+```
+
 ## Approve and commit the chaincode
 
 Set the chaincode package ID again (this is a different terminal):
@@ -163,9 +168,9 @@ export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd681
 Using the peer1 admin, approve and commit the chaincode (only a single approver is required based on the lifecycle endorsement policy of any organization):
 
 ```
-peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 --channelID mychannel --name basic --version 1 --package-id $CHAINCODE_ID --sequence 1 --tls --cafile ${PWD}/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 --channelID mychannel --name $CC_NAME --version 1 --package-id $CHAINCODE_ID --sequence 1 --tls --cafile ${PWD}/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
-peer lifecycle chaincode commit -o 127.0.0.1:6050 --channelID mychannel --name basic --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+peer lifecycle chaincode commit -o 127.0.0.1:6050 --channelID mychannel --name $CC_NAME --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 ```
 
 ## Interact with the chaincode
@@ -174,13 +179,13 @@ Invoke the chaincode to create an asset (only a single endorser is required base
 Then query the asset, update it, and query again to see the resulting asset changes on the ledger. Note that you need to wait a bit for invoke transactions to complete.
 
 ```
-peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n basic -c '{"Args":["CreateAsset","1","blue","35","tom","1000"]}' --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n $CC_NAME -c '{"Args":["CreateAsset","1","blue","35","tom","1000"]}' --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
-peer chaincode query -C mychannel -n basic -c '{"Args":["ReadAsset","1"]}'
+peer chaincode query -C mychannel -n $CC_NAME -c '{"Args":["ReadAsset","1"]}'
 
-peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n basic -c '{"Args":["UpdateAsset","1","blue","35","jerry","1000"]}' --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n $CC_NAME -c '{"Args":["UpdateAsset","1","blue","35","jerry","1000"]}' --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
-peer chaincode query -C mychannel -n basic -c '{"Args":["ReadAsset","1"]}'
+peer chaincode query -C mychannel -n $CC_NAME -c '{"Args":["ReadAsset","1"]}'
 ```
 
 Congratulations, you have deployed a minimal Fabric network! Inspect the scripts if you would like to see the minimal set of commands that were required to deploy the network.
