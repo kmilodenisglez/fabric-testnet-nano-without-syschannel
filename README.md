@@ -167,7 +167,7 @@ export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd681
 
 Using the peer1 admin, approve and commit the chaincode (only a single approver is required based on the lifecycle endorsement policy of any organization):
 
-```
+```bash
 peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 --channelID mychannel --name $CC_NAME --version 1 --package-id $CHAINCODE_ID --sequence 1 --tls --cafile ${PWD}/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
 peer lifecycle chaincode commit -o 127.0.0.1:6050 --channelID mychannel --name $CC_NAME --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
@@ -178,7 +178,10 @@ peer lifecycle chaincode commit -o 127.0.0.1:6050 --channelID mychannel --name $
 Invoke the chaincode to create an asset (only a single endorser is required based on the default endorsement policy of any organization).
 Then query the asset, update it, and query again to see the resulting asset changes on the ledger. Note that you need to wait a bit for invoke transactions to complete.
 
-```
+```bash
+# init ledger
+peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n $CC_NAME -c '{"Args":["InitLedger"]}' --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+
 peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n $CC_NAME -c '{"Args":["CreateAsset","1","blue","35","tom","1000"]}' --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
 peer chaincode query -C mychannel -n $CC_NAME -c '{"Args":["ReadAsset","1"]}'
