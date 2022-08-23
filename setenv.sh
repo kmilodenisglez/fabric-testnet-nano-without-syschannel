@@ -5,7 +5,7 @@ export PATH="${PWD}"/../bin:"$PATH"
 export FABRIC_CFG_PATH="${PWD}"/../config
 
 # cambiar por que el nombre de su chaincode a consultar
-ecport CC_NAME=basic
+export CC_NAME=basic
 export CHANNEL_NAME=mychannel
 export FABRIC_LOGGING_SPEC=INFO
 export CORE_PEER_TLS_ENABLED=true
