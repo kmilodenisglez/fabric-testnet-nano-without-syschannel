@@ -6,8 +6,13 @@ export CC_NAME=basic
 export CHAINCODE_ID=_chaincode_id_here_
 export CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
 
-# look for binaries in local samples /bin directory
-export PATH="${PWD}"/../bin:"$PATH"
+if ! command -v peer version &> /dev/null
+then
+    # look for binaries in local samples /bin directory
+    export PATH="${PWD}"/../bin:"$PATH"
+fi
+
+
 export FABRIC_CFG_PATH="${PWD}"/../config
 
 export CHANNEL_NAME=mychannel
@@ -20,4 +25,4 @@ export CORE_PEER_MSPCONFIGPATH="${PWD}"/crypto-config/peerOrganizations/org1.exa
 
 # to query the chaincode (peer chaincode invoke and peer chaincode query)
 export ORDERER_ADDRESS=127.0.0.1:6050
-export ORDERER_TLS_CA=${CRYPTO_PATH}/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+export ORDERER_TLS_CA="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt

@@ -7,8 +7,12 @@ else
   CCADDR="host.docker.internal"
 fi
 
-# look for binaries in local dev environment /build/bin directory and then in local samples /bin directory
-export PATH="${PWD}"/../bin:"$PATH"
+if ! command -v peer version &> /dev/null
+then
+    # look for binaries in local samples /bin directory
+    export PATH="${PWD}"/../bin:"$PATH"
+fi
+
 export FABRIC_CFG_PATH="${PWD}"/../config
 
 export FABRIC_LOGGING_SPEC=debug:cauthdsl,policies,msp,grpc,peer.gossip.mcs,gossip,leveldbhelper=info
@@ -22,7 +26,7 @@ export CORE_PEER_LISTENADDRESS=127.0.0.1:7051
 export CORE_PEER_CHAINCODEADDRESS="${CCADDR}":7052
 export CORE_PEER_CHAINCODELISTENADDRESS=127.0.0.1:7052
 # bootstrap peer is the other peer in the same org
-export CORE_PEER_GOSSIP_BOOTSTRAP=127.0.0.1:7053  # usar 7051 si levantas un unico peer
+export CORE_PEER_GOSSIP_BOOTSTRAP=127.0.0.1:7053  # use 7051 if you start up a single peer
 export CORE_PEER_GOSSIP_EXTERNALENDPOINT=127.0.0.1:7051
 export CORE_PEER_LOCALMSPID=Org1MSP
 export CORE_PEER_MSPCONFIGPATH="${PWD}"/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp

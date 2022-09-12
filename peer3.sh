@@ -7,8 +7,11 @@ else
   CCADDR="host.docker.internal"
 fi
 
-# look for binaries in local dev environment /build/bin directory and then in local samples /bin directory
-export PATH="${PWD}"/../../fabric/build/bin:"${PWD}"/../bin:"$PATH"
+if ! command -v peer version &> /dev/null
+then
+    # look for binaries in local samples /bin directory
+    export PATH="${PWD}"/../bin:"$PATH"
+fi
 export FABRIC_CFG_PATH="${PWD}"/../config
 
 export FABRIC_LOGGING_SPEC=debug:cauthdsl,policies,msp,grpc,peer.gossip.mcs,gossip,leveldbhelper=info
