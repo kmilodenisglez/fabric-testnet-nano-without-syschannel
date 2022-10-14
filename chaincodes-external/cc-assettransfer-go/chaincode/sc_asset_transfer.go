@@ -77,6 +77,31 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	return ctx.GetStub().PutState(id, assetJSON)
 }
 
+// CreateAssetUsingStructParam issues a new asset to the world state with given details.
+func (s *SmartContract) CreateAssetUsingStructParam(ctx contractapi.TransactionContextInterface, request *Asset) error {
+	exists, err := s.AssetExists(ctx, request.ID)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("the asset %s already exists", request.ID)
+	}
+	asset := Asset{
+		ID:             request.ID,
+		Color:          request.Color,
+		Size:           request.Size,
+		Owner:          request.Owner,
+		AppraisedValue: request.AppraisedValue,
+	}
+
+	assetJSON, err := json.Marshal(asset)
+	if err != nil {
+		return err
+	}
+
+	return ctx.GetStub().PutState(request.ID, assetJSON)
+}
+
 // ReadAsset returns the asset stored in the world state with given id.
 func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, id string) (*Asset, error) {
 	assetJSON, err := ctx.GetStub().GetState(id)
@@ -199,4 +224,8 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 	}
 
 	return results, nil
+}
+
+func (s *SmartContract) GetEvaluateTransactions() []string {
+	return []string{"CreateAssetO"}
 }
