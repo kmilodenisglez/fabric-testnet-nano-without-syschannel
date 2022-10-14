@@ -4,14 +4,14 @@ Based on fabric-samples/test-network-nano-bash, but without using __system chann
 
 Use the same structure as test-network-nano-bash, see [test-network-nano-bash](https://github.com/hyperledger/fabric-samples/tree/main/test-network-nano-bash) for more details
 
-# Prereqs
+# Pre-requirements
 
 ## Download fabric binaries <a name="fabconnect_testnetwork_download_prerequisites"></a>
 
 ```bash
 mkdir fabric-folder && cd fabric-folder
 ```
-To get the install script:
+To get the installation script:
 
 ```bash
 curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
@@ -33,7 +33,7 @@ git clone https://github.com/kmilodenisglez/fabric-testnet-nano-without-syschann
 ## To run the chaincode as a service
 > **The (ccaas) builder release:** Since Fabric version 2.4.6 the chaincode-as-a-service (ccaas) builder release is available in all release distributions.
 
-- If you are using a version prior to 2.4.6 and you do not have them in `fabric-folder/bin` you can build them from the Fabric source with the command `make ccaasbuilder`, you will then find the builder in `fabric/release/darwin-amd64/bin` or equivalent for your system. Just move the whole hierarchy starting there to `fabric-folder/bin` with something like: `mv release/darwin-amd64/bin/ccaas_builder ../fabric-folder/bin`
+- If you are using a version prior to 2.4.6, and you do not have them in `fabric-folder/bin` you can build them from the Fabric source with the command `make ccaasbuilder`, you will then find the builder in `fabric/release/darwin-amd64/bin` or equivalent for your system. Just move the whole hierarchy starting there to `fabric-folder/bin` with something like: `mv release/darwin-amd64/bin/ccaas_builder ../fabric-folder/bin`
 
 - You need to edit the `fabric-folder/config/core.yaml` file to point to that builder. The path specified in the default config file is only valid within the peer container which you won't be using. Modify the `externalBuilders` field in the `core.yaml` file to add the local external builder so that the configuration looks something like the following:
 ```
