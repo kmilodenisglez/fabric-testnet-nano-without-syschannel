@@ -76,46 +76,45 @@ To deploy and invoke the chaincode, utilize the peer1 admin terminal that you ha
 
 ## 1. Running the chaincode as a service
 
-Package and install the external chaincode on peer1 with the following simple commands:
-
-Package:
-```bash
-cd chaincodes-external/cc-assettransfer-go
-
-tar cfz code.tar.gz connection.json
-tar cfz external-chaincode.tgz metadata.json code.tar.gz
-```
-
-Return to the root of the project:
-```bash
-cd ../..
-```
-
-Export the environment variables in the terminal, only if it has not been done:
+In another terminal, export the environment variables in the terminal:
 ```bash
 source ./setenv.sh
 ```
 > Note the syntax of running the scripts. The setenv.sh scripts run with the `source` command in order to source the script files in the respective shells. This is important so that the exported environment variables can be utilized by any subsequent user commands. In order to use commands like the `peer`.
+
+Navigate to chaincode ex: `chaincodes-external/cc-assettransfer-go`:
+
+```bash
+cd chaincodes-external/cc-assettransfer-go
+```
+
+Package and install the external chaincode on peer1 with the following simple commands:
+
+Package:
+```bash
+tar cfz code.tar.gz connection.json
+tar cfz external-chaincode.tgz metadata.json code.tar.gz
+```
 
 Install the `cc-assettransfer-go` chaincode
 ```bash
 peer lifecycle chaincode install chaincodes-external/cc-assettransfer-go/external-chaincode.tgz
 ```
 
-Run the following command to query the package ID of the chaincode that you just installed:
-```
+Run the following command to query all chaincode ID that you just installed:
+```bash
 peer lifecycle chaincode queryinstalled
 ```
 
 The command will return output similar to the following:
-```
+```bash
 Installed chaincodes on peer:
 Package ID: basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80, Label: basic_1.0
 ```
 
 Copy the returned chaincode package ID into an environment variable for use in subsequent commands (your ID may be different):
 
-```
+```bash
 # in linux, wsl and darwin use export, ex:
 export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
 
@@ -123,7 +122,33 @@ export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd681
 set CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
 ```
 
-In another terminal, navigate to chaincode ex: `chaincodes-external/cc-assettransfer-go` and build the chaincode:
+## Set chaincode name 
+```bash
+export CC_NAME=basic
+```
+
+## Approve and commit the chaincode
+
+Using the peer1 admin, approve and commit the chaincode (only a single approve is required based on the lifecycle endorsement policy of any organization).
+
+Approve chaincode:
+```bash
+peer lifecycle chaincode approveformyorg --version 1 --sequence 1 -o $ORDERER_ADDRESS --channelID $CHANNEL_NAME --name $CC_NAME --package-id $CHAINCODE_ID --tls --cafile $ORDERER_TLS_CA
+```
+Commit chaincode:
+```bash
+peer lifecycle chaincode commit --version 1 --sequence 1 -o $ORDERER_ADDRESS --channelID $CHANNEL_NAME --name $CC_NAME --tls --cafile $ORDERER_TLS_CA
+```
+
+Set the chaincode server address:
+```bash
+export CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
+
+# windows
+set CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
+```
+
+Build the chaincode:
 
 ```bash
 # linux or darwin
@@ -131,15 +156,6 @@ go build -o ccass_binary
 
 # windows
 go build -o ccass_binary.exe
-```
-
-Set the chaincode server address:
-
-```bash
-export CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
-
-# windows
-set CHAINCODE_SERVER_ADDRESS=127.0.0.1:9999
 ```
 
 And start the chaincode service:
@@ -152,42 +168,32 @@ And start the chaincode service:
 ccass_binary.exe
 ```
 
-## Set chaincode name 
-```bash
-export CC_NAME=basic
-```
-
-## Approve and commit the chaincode
-
-Set the chaincode package ID again (this is a different terminal):
-
-```bash
-export CHAINCODE_ID=basic_1.0:f3e2ca5115bba71aa2fd16e35722b420cb29c42594f0fdd6814daedbc2130b80
-```
-
-Using the peer1 admin, approve and commit the chaincode (only a single approver is required based on the lifecycle endorsement policy of any organization):
-
-```bash
-peer lifecycle chaincode approveformyorg --version 1 --sequence 1 -o $ORDERER_ADDRESS --channelID $CHANNEL_NAME --name $CC_NAME --package-id $CHAINCODE_ID --tls --cafile $ORDERER_TLS_CA
-
-peer lifecycle chaincode commit --version 1 --sequence 1 -o $ORDERER_ADDRESS --channelID $CHANNEL_NAME --name $CC_NAME --tls --cafile $ORDERER_TLS_CA
-```
-
 ## Interact with the chaincode
 
-Invoke the chaincode to create an asset (only a single endorser is required based on the default endorsement policy of any organization).
+In another terminal invoke the chaincode to create an asset (only a single endorser is required based on the default endorsement policy of any organization).
 Then query the asset, update it, and query again to see the resulting asset changes on the ledger. Note that you need to wait a bit for invoke transactions to complete.
 
+### Init the ledger
 ```bash
-# init ledger
 peer chaincode invoke -c '{"Args":["InitLedger"]}' -o $ORDERER_ADDRESS -C $CHANNEL_NAME -n $CC_NAME --tls --cafile $ORDERER_TLS_CA
+```
 
+### Create an asset
+```bash
 peer chaincode invoke -c '{"Args":["CreateAsset","1","blue","35","tom","1000"]}' -o $ORDERER_ADDRESS -C $CHANNEL_NAME -n $CC_NAME --tls --cafile $ORDERER_TLS_CA
-
+```
+### Read an asset
+```bash
 peer chaincode query -c '{"Args":["ReadAsset","1"]}' -C $CHANNEL_NAME -n $CC_NAME
+```
 
+### Update an asset
+```bash
 peer chaincode invoke -c '{"Args":["UpdateAsset","1","blue","35","jerry","1000"]}' -o $ORDERER_ADDRESS -C $CHANNEL_NAME -n $CC_NAME --tls --cafile $ORDERER_TLS_CA
+```
 
+### Read an asset
+```bash
 peer chaincode query -c '{"Args":["ReadAsset","1"]}' -C $CHANNEL_NAME -n $CC_NAME
 ```
 
