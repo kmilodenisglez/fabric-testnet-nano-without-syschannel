@@ -98,7 +98,7 @@ tar cfz external-chaincode.tgz metadata.json code.tar.gz
 
 Install the `cc-assettransfer-go` chaincode
 ```bash
-peer lifecycle chaincode install chaincodes-external/cc-assettransfer-go/external-chaincode.tgz
+peer lifecycle chaincode install external-chaincode.tgz
 ```
 
 Run the following command to query all chaincode ID that you just installed:
