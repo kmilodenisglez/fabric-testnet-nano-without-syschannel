@@ -173,25 +173,36 @@ ccass_binary.exe
 In another terminal invoke the chaincode to create an asset (only a single endorser is required based on the default endorsement policy of any organization).
 Then query the asset, update it, and query again to see the resulting asset changes on the ledger. Note that you need to wait a bit for invoke transactions to complete.
 
+Export the environment variables in the terminal:
+```bash
+source ./setenv.sh
+```
+
+Populate the ledger with fake data:
 ### Init the ledger
 ```bash
 peer chaincode invoke -c '{"Args":["InitLedger"]}' -o $ORDERER_ADDRESS -C $CHANNEL_NAME -n $CC_NAME --tls --cafile $ORDERER_TLS_CA
 ```
 
+Insert an asset in ledger:
 ### Create an asset
 ```bash
 peer chaincode invoke -c '{"Args":["CreateAsset","1","blue","35","tom","1000"]}' -o $ORDERER_ADDRESS -C $CHANNEL_NAME -n $CC_NAME --tls --cafile $ORDERER_TLS_CA
 ```
+
+Query the asset created in the previous step:
 ### Read an asset
 ```bash
 peer chaincode query -c '{"Args":["ReadAsset","1"]}' -C $CHANNEL_NAME -n $CC_NAME
 ```
 
+Update the asset:
 ### Update an asset
 ```bash
 peer chaincode invoke -c '{"Args":["UpdateAsset","1","blue","35","jerry","1000"]}' -o $ORDERER_ADDRESS -C $CHANNEL_NAME -n $CC_NAME --tls --cafile $ORDERER_TLS_CA
 ```
 
+Query the asset modified in the previous step:
 ### Read an asset
 ```bash
 peer chaincode query -c '{"Args":["ReadAsset","1"]}' -C $CHANNEL_NAME -n $CC_NAME
