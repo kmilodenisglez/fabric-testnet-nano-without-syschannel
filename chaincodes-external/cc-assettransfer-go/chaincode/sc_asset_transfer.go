@@ -75,7 +75,12 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		return err
 	}
 
-	return ctx.GetStub().PutState(id, assetJSON)
+	err = ctx.GetStub().PutState(id, assetJSON)
+	if err != nil {
+		return fmt.Errorf("failed to put to world state: %v", err)
+	}
+	fmt.Printf("Insert %s with %s \n\n", asset.ID, string(assetJSON))
+	return nil
 }
 
 // CreateAssetUsingStructParam issues a new asset to the world state with given details.
@@ -100,7 +105,12 @@ func (s *SmartContract) CreateAssetUsingStructParam(ctx contractapi.TransactionC
 		return err
 	}
 
-	return ctx.GetStub().PutState(request.ID, assetJSON)
+	err = ctx.GetStub().PutState(request.ID, assetJSON)
+	if err != nil {
+		return fmt.Errorf("failed to put to world state: %v", err)
+	}
+	fmt.Printf("Insert %s with %s \n\n", asset.ID, string(assetJSON))
+	return nil
 }
 
 // ReadAsset returns the asset stored in the world state with given id.
@@ -146,7 +156,12 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 		return err
 	}
 
-	return ctx.GetStub().PutState(id, assetJSON)
+	err = ctx.GetStub().PutState(id, assetJSON)
+	if err != nil {
+		return fmt.Errorf("failed to put to world state: %v", err)
+	}
+	fmt.Printf("Update %s with %s \n\n", asset.ID, string(assetJSON))
+	return nil
 }
 
 // DeleteAsset deletes an given asset from the world state.
@@ -159,7 +174,12 @@ func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface,
 		return fmt.Errorf("the asset %s does not exist", id)
 	}
 
-	return ctx.GetStub().DelState(id)
+	err = ctx.GetStub().DelState(id)
+	if err != nil {
+		return fmt.Errorf("failed to put to world state: %v", err)
+	}
+	fmt.Printf("Delete %s \n\n", id)
+	return nil
 }
 
 // AssetExists returns true when asset with given ID exists in world state
