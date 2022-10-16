@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/hyperledger/fabric-chaincode-go/shim"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 	"github.com/kmilodenisglez/fabric-testnet-nano-without-syschannel/chaincodes-external/cc-assettransfer-go/chaincode"
@@ -35,9 +36,12 @@ func main() {
 		TLSProps: getTLSProperties(),
 	}
 
+	fmt.Println("starting the chaincode on address: ", config.Address)
+
 	if err := server.Start(); err != nil {
 		log.Panicf("error starting asset-transfer-basic chaincode: %s", err)
 	}
+
 }
 
 func getTLSProperties() shim.TLSProperties {

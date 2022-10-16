@@ -47,6 +47,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		if err != nil {
 			return fmt.Errorf("failed to put to world state: %v", err)
 		}
+		fmt.Printf("Insert %s with %s \n\n", asset.ID, string(assetJSON))
 	}
 
 	return nil

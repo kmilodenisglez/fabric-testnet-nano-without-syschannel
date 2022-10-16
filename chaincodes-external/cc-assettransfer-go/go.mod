@@ -1,6 +1,6 @@
 module github.com/kmilodenisglez/fabric-testnet-nano-without-syschannel/chaincodes-external/cc-assettransfer-go
 
-go 1.14
+go 1.16
 
 require (
 	github.com/hyperledger/fabric-chaincode-go v0.0.0-20200424173110-d7076418f212
