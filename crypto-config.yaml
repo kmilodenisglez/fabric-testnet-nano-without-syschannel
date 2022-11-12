@@ -15,16 +15,11 @@ OrdererOrgs:
       - Hostname: orderer
         SANS:
           - 127.0.0.1
+          - "orderer1.{{.Domain}}"
       - Hostname: orderer2
         SANS:
           - 127.0.0.1
       - Hostname: orderer3
-        SANS:
-          - 127.0.0.1
-      - Hostname: orderer4
-        SANS:
-          - 127.0.0.1
-      - Hostname: orderer5
         SANS:
           - 127.0.0.1
 
@@ -40,6 +35,7 @@ PeerOrgs:
       Count: 2
       SANS:
         - 127.0.0.1
+#        - "altfoo.{{.Domain}}"
     Users:
       Count: 1
 

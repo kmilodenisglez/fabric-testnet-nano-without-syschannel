@@ -2,7 +2,8 @@
 set -eu
 
 if [ "$(uname)" = "Linux" ] ; then
-  CCADDR="127.0.0.1"
+#  CCADDR="127.0.0.1"
+  CCADDR="peer0.org2.example.com"
 else
   CCADDR="host.docker.internal"
 fi
@@ -12,6 +13,7 @@ then
     # look for binaries in local samples /bin directory
     export PATH="${PWD}"/../bin:"$PATH"
 fi
+
 export FABRIC_CFG_PATH="${PWD}"/../config
 
 export FABRIC_LOGGING_SPEC=debug:cauthdsl,policies,msp,grpc,peer.gossip.mcs,gossip,leveldbhelper=info
@@ -20,16 +22,19 @@ export CORE_PEER_TLS_CERT_FILE="${PWD}"/crypto-config/peerOrganizations/org2.exa
 export CORE_PEER_TLS_KEY_FILE="${PWD}"/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/server.key
 export CORE_PEER_TLS_ROOTCERT_FILE="${PWD}"/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
 export CORE_PEER_ID=peer0.org2.example.com
-export CORE_PEER_ADDRESS=127.0.0.1:7055
-export CORE_PEER_LISTENADDRESS=127.0.0.1:7055
+export CORE_PEER_ADDRESS=peer0.org2.example.com:7055
+export CORE_PEER_LISTENADDRESS=0.0.0.0:7055
 export CORE_PEER_CHAINCODEADDRESS="${CCADDR}":7056
-export CORE_PEER_CHAINCODELISTENADDRESS=127.0.0.1:7056
+export CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7056
 # bootstrap peer is the other peer in the same org
-export CORE_PEER_GOSSIP_BOOTSTRAP=127.0.0.1:7057
-export CORE_PEER_GOSSIP_EXTERNALENDPOINT=127.0.0.1:7055
+export CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7057
+export CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7055
 export CORE_PEER_LOCALMSPID=Org2MSP
 export CORE_PEER_MSPCONFIGPATH="${PWD}"/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp
-export CORE_OPERATIONS_LISTENADDRESS=127.0.0.1:8448
+export CORE_OPERATIONS_LISTENADDRESS=peer0.org2.example.com:8448
+export CORE_METRICS_PROVIDER=prometheus
+# https://hyperledger-fabric.readthedocs.io/en/latest/cc_basic.html#running-with-multiple-peers
+# export CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0org1"}
 export CORE_PEER_FILESYSTEMPATH="${PWD}"/data/peer0.org2.example.com
 export CORE_LEDGER_SNAPSHOTS_ROOTDIR="${PWD}"/data/peer0.org2.example.com/snapshots
 
@@ -38,7 +43,14 @@ export CORE_LEDGER_SNAPSHOTS_ROOTDIR="${PWD}"/data/peer0.org2.example.com/snapsh
 # export CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=127.0.0.1:5986
 # export CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
 # export CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=password
-# docker run --publish 5986:5984 --detach -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password --name couchdb3 couchdb:3.1.1
+## remove the container only if it exists
+#CONTAINER_NAME=$(docker ps -aqf "NAME=worldstate")
+#if [ -z "$CONTAINER_NAME" -o "$CONTAINER_NAME" = " " ]; then
+#	echo "---- No world-state container available for deletion ----"
+#else
+#	docker rm -f $CONTAINER_NAME
+#fi
+#docker run --publish 5986:5984 --detach -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password --name couchdb3 couchdb:3.1.1
 
 # start peer
 peer node start

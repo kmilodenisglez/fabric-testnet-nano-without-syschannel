@@ -16,10 +16,10 @@ cryptogen generate --config="${PWD}"/crypto-config.yaml
 export FABRIC_CFG_PATH="${PWD}"
 
 echo "Generating  genesis block for application channel"
-configtxgen -profile SampleAppChannelEtcdRaft -outputBlock channel-artifacts/mychannel.block -channelID mychannel
+configtxgen -profile TwoOrgsChannel -outputBlock channel-artifacts/mychannel.block -channelID mychannel
 
-#echo "Generating anchor peer update transaction for Org1"
-#configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate channel-artifacts/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
+echo "Generating anchor peer update transaction for Org1"
+configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate channel-artifacts/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
 
-#echo "Generating anchor peer update transaction for Org2"
-#configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP
+echo "Generating anchor peer update transaction for Org2"
+configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate channel-artifacts/Org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP

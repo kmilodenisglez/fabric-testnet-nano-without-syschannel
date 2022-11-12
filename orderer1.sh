@@ -11,6 +11,7 @@ fi
 export FABRIC_CFG_PATH="${PWD}"/../config
 
 export FABRIC_LOGGING_SPEC=debug:cauthdsl,policies,msp,common.configtx,common.channelconfig=info
+export ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
 export ORDERER_GENERAL_LISTENPORT=6050
 export ORDERER_GENERAL_LOCALMSPID=OrdererMSP
 export ORDERER_GENERAL_LOCALMSPDIR="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp
@@ -24,9 +25,9 @@ export ORDERER_GENERAL_BOOTSTRAPFILE="${PWD}"/channel-artifacts/genesis.block
 export ORDERER_FILELEDGER_LOCATION="${PWD}"/data/orderer
 export ORDERER_CONSENSUS_WALDIR="${PWD}"/data/orderer/etcdraft/wal
 export ORDERER_CONSENSUS_SNAPDIR="${PWD}"/data/orderer/etcdraft/wal
-export ORDERER_OPERATIONS_LISTENADDRESS=127.0.0.1:8443
+export ORDERER_OPERATIONS_LISTENADDRESS=orderer.example.com:8443
 # configuration for orderer admin
-export ORDERER_ADMIN_LISTENADDRESS=127.0.0.1:9443
+export ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:9443
 export ORDERER_ADMIN_TLS_ENABLED=true
 export ORDERER_ADMIN_TLS_PRIVATEKEY="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
 export ORDERER_ADMIN_TLS_CERTIFICATE="${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt

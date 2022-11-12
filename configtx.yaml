@@ -42,9 +42,7 @@ Organizations:
                 Rule: "OR('OrdererMSP.admin')"
 
         OrdererEndpoints:
-            - 127.0.0.1:6050
-#            - 127.0.0.1:6051
-#            - 127.0.0.1:6052
+            - orderer.example.com:6050
 
     - &Org1
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -78,7 +76,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: 127.0.0.1
+            - Host: peer0.org1.example.com
               Port: 7051
 
     - &Org2
@@ -112,7 +110,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: 127.0.0.1
+            - Host: peer0.vcl.cu
               Port: 7055
 
 ################################################################################
@@ -222,18 +220,10 @@ Orderer: &OrdererDefaults
 
     EtcdRaft:
         Consenters:
-        - Host: 127.0.0.1
+        - Host: orderer.example.com
           Port: 6050
           ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
           ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
-#        - Host: 127.0.0.1
-#          Port: 6051
-#          ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-#          ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-#        - Host: 127.0.0.1
-#          Port: 6052
-#          ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
-#          ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
 
         # Options to be specified for all the etcd/raft nodes. The values here
         # are the defaults for all new channels and can be modified on a
