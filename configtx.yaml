@@ -392,7 +392,7 @@ Profiles:
             <<: *ApplicationDefaults
             Organizations:
                 - *Org1
-#                - *Org2
+                - *Org2
             Capabilities:
                 <<: *ApplicationCapabilities
 
