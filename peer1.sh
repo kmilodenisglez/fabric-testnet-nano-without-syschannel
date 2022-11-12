@@ -27,7 +27,8 @@ export CORE_PEER_LISTENADDRESS=0.0.0.0:7051
 export CORE_PEER_CHAINCODEADDRESS="${CCADDR}":7052
 export CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
 # bootstrap peer is the other peer in the same org
-export CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7053  # use 7051 if you start up a single peer
+#export CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7053  # use 7051 if you start up a single peer
+export CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051  # use 7051 if you start up a single peer
 export CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
 export CORE_PEER_LOCALMSPID=Org1MSP
 export CORE_PEER_MSPCONFIGPATH="${PWD}"/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
