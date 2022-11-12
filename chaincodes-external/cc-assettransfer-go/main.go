@@ -1,10 +1,10 @@
 package main
 
 import (
+	"cc-assettransfer-go/chaincode"
 	"fmt"
 	"github.com/hyperledger/fabric-chaincode-go/shim"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
-	"github.com/kmilodenisglez/fabric-testnet-nano-without-syschannel/chaincodes-external/cc-assettransfer-go/chaincode"
 	"io/ioutil"
 	"log"
 	"os"

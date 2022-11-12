@@ -1,4 +1,4 @@
-module github.com/kmilodenisglez/fabric-testnet-nano-without-syschannel/chaincodes-external/cc-assettransfer-go
+module cc-assettransfer-go
 
 go 1.16
 
