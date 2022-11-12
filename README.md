@@ -4,6 +4,33 @@ Based on fabric-samples/test-network-nano-bash, but without using __system chann
 
 Use the same structure as test-network-nano-bash, see [test-network-nano-bash](https://github.com/hyperledger/fabric-samples/tree/main/test-network-nano-bash) for more details
 
+# Configure the domain names on each physical machine
+
+## Domain name in /etc/hosts
+## first machine (Organization 1)
+```bash
+sudo nano /etc/hosts
+```
+
+Replace `put-org1-ip-address-here` and `put-org2-ip-address-here` with the IPs of Org1 and Org2 respectively
+```text
+127.0.0.1 peer0.org1.example.com orderer.example.com orderer1.example.com
+put-org1-ip-address-here peer0.org1.example.com orderer.example.com orderer1.example.com
+put-org2-ip-address-here peer0.org2.example.com
+```
+
+## first machine (Organization 2)
+```bash
+sudo nano /etc/hosts
+```
+
+Replace `put-org1-ip-address-here`with the Org1 IP
+```text
+127.0.0.1 peer0.org2.example.com
+put-org1-ip-address-here peer0.org1.example.com orderer.example.com orderer1.example.com
+
+```
+
 # Pre-requirements
 
 ## Download fabric binaries <a name="fabconnect_testnetwork_download_prerequisites"></a>
