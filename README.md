@@ -7,29 +7,31 @@ Use the same structure as test-network-nano-bash, see [test-network-nano-bash](h
 # Configure the domain names on each physical machine
 
 ## Domain name in /etc/hosts
-## first machine (Organization 1)
+## first computer (Organization 1)
+Open /etc/hosts to modify
 ```bash
 sudo nano /etc/hosts
 ```
-
-Replace `put-org1-ip-address-here` and `put-org2-ip-address-here` with the IPs of Org1 and Org2 respectively
+Add the following lines to the hosts file.
 ```text
 127.0.0.1 peer0.org1.example.com orderer.example.com orderer1.example.com
 put-org1-ip-address-here peer0.org1.example.com orderer.example.com orderer1.example.com
 put-org2-ip-address-here peer0.org2.example.com
 ```
-
-## first machine (Organization 2)
+> Note: Replace `put-org1-ip-address-here` and `put-org2-ip-address-here` with the IPs of Org1 and Org2 respectively
+## second computer (Organization 2)
+Open /etc/hosts to modify
 ```bash
 sudo nano /etc/hosts
 ```
 
-Replace `put-org1-ip-address-here`with the Org1 IP
+Add the following lines to the hosts file.
 ```text
 127.0.0.1 peer0.org2.example.com
 put-org1-ip-address-here peer0.org1.example.com orderer.example.com orderer1.example.com
 
 ```
+> Note: Replace `put-org1-ip-address-here` with the Org1 IP
 
 # Pre-requirements
 
