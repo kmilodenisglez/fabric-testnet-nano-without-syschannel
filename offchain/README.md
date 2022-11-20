@@ -27,13 +27,6 @@ The Fabric test network is used to deploy and run this sample. Follow these step
 
 1. Create and run the test network.
 
-2. Deploy one smart contract.
-
-3. Run listener
-
-   ```bash
-   # To run the application
-   cd application-typescript
 2. Deploy one smart contract in network.
 
 4. Build app
