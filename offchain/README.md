@@ -34,6 +34,17 @@ The Fabric test network is used to deploy and run this sample. Follow these step
    ```bash
    # To run the application
    cd application-typescript
+2. Deploy one smart contract in network.
+
+4. Build app
+```bash
+cd application-typescript
+npm run build
+```
+
+5. Run listener
+To run the application
+   ```bash 
    npm start listen
    ```
 
