@@ -11,7 +11,7 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 
 export const channelName = process.env.CHANNEL_NAME ?? 'mychannel';
-export const chaincodeName = process.env.CHAINCODE_NAME ?? 'basic';
+// export const chaincodeName = process.env.CHAINCODE_NAME ?? 'basic';
 
 const peerName = 'peer0.org1.example.com';
 const mspId = process.env.MSP_ID ?? 'Org1MSP';
