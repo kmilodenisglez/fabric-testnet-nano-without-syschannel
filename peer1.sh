@@ -35,6 +35,7 @@ export CORE_PEER_FILESYSTEMPATH="${PWD}"/data/peer0.org1.example.com
 export CORE_LEDGER_SNAPSHOTS_ROOTDIR="${PWD}"/data/peer0.org1.example.com/snapshots
 
 # uncomment the lines below to utilize couchdb state database, when done with the environment you can stop the couchdb container with "docker rm -f couchdb1"
+# 	- Navegar: http://ip:port/_utils
 #export CORE_LEDGER_STATE_STATEDATABASE=CouchDB
 #export CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=127.0.0.1:5984
 #export CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
