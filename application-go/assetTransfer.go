@@ -1,174 +1,157 @@
-/*
-Copyright 2020 IBM All Rights Reserved.
-
-SPDX-License-Identifier: Apache-2.0
-*/
-
 package main
 
 import (
+	"bytes"
+	"crypto/x509"
+	"encoding/json"
 	"fmt"
-	jsoniter "github.com/json-iterator/go"
-	"io/ioutil"
-	"log"
-	"path/filepath"
+	"os"
+	"path"
+	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
-	"github.com/hyperledger/fabric-sdk-go/pkg/gateway"
+	"github.com/hyperledger/fabric-gateway/pkg/client"
+	"github.com/hyperledger/fabric-gateway/pkg/identity"
+	
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
+const (
+	mspID        = "Org1MSP"
+	cryptoPath   = "../crypto-config/peerOrganizations/org1.example.com"
+	certPath     = cryptoPath + "/users/Admin@org1.example.com/msp/signcerts"
+	keyPath      = cryptoPath + "/users/Admin@org1.example.com/msp/keystore"
+	tlsCertPath  = cryptoPath + "/tlsca/tlsca.org1.example.com-cert.pem"
+	peerEndpoint = "localhost:7051"
+	gatewayPeer  = "peer0.org1.example.com"
+)
+
+var assetID = fmt.Sprintf("asset%d", time.Now().UnixNano()/1e6)
+
 func main() {
-	log.Println("============ application-golang starts ============")
+	fmt.Println("=========== Fabric Gateway Go Example ===========")
 
-	var channelName = "mychannel"
-	var contractName = "basic"
+	clientConn := newGrpcConnection()
+	defer clientConn.Close()
 
-	//err := os.Setenv("DISCOVERY_AS_LOCALHOST", "true")
-	//if err != nil {
-	//	log.Fatalf("Error setting DISCOVERY_AS_LOCALHOST environment variable: %v", err)
-	//}
+	id := newIdentity()
+	sign := newSign()
 
-	wallet, err := gateway.NewFileSystemWallet("wallet")
-	if err != nil {
-		log.Fatalf("Failed to create wallet: %v", err)
-	}
-
-	if !wallet.Exists("appAdmin") {
-		err = populateWallet(wallet)
-		if err != nil {
-			log.Fatalf("Failed to populate wallet contents: %v", err)
-		}
-	}
-
-	ccpPath := filepath.Join(
-		"ccp.yaml",
-	)
-
-	gw, err := gateway.Connect(
-		gateway.WithConfig(config.FromFile(filepath.Clean(ccpPath))),
-		gateway.WithIdentity(wallet, "appUser"),
+	gw, err := client.Connect(
+		id,
+		client.WithSign(sign),
+		client.WithClientConnection(clientConn),
+		client.WithEvaluateTimeout(5*time.Second),
+		client.WithEndorseTimeout(15*time.Second),
+		client.WithSubmitTimeout(5*time.Second),
+		client.WithCommitStatusTimeout(1*time.Minute),
 	)
 	if err != nil {
-		log.Fatalf("Failed to connect to gateway: %v", err)
+		panic(err)
 	}
 	defer gw.Close()
 
-	network, err := gw.GetNetwork(channelName)
-	if err != nil {
-		log.Fatalf("Failed to get network: %v", err)
-	}
+	network := gw.GetNetwork("mychannel")
+	contract := network.GetContract("basic")
 
-	contract := network.GetContract(contractName)
-
-	log.Println("--> Submit Transaction: InitLedger, function creates the initial set of assets on the ledger")
-	result, err := contract.SubmitTransaction("InitLedger")
+	// InitLedger
+	fmt.Println("\n--> Submit Transaction: InitLedger")
+	_, err = contract.SubmitTransaction("InitLedger")
 	if err != nil {
-		log.Fatalf("Failed to Submit transaction: %v", err)
+		panic(err)
 	}
-	log.Println(string(result))
+	fmt.Println("*** InitLedger committed")
 
-	log.Println("--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger")
-	result, err = contract.EvaluateTransaction("GetAllAssets")
+	// CreateAsset
+	fmt.Printf("\n--> Submit Transaction: CreateAsset %s\n", assetID)
+	_, err = contract.SubmitTransaction("CreateAsset", assetID, "blue", "10", "Alice", "500")
 	if err != nil {
-		log.Fatalf("Failed to evaluate transaction: %v", err)
+		panic(err)
 	}
-	log.Println(string(result))
+	fmt.Println("*** CreateAsset committed")
 
-	type Asset struct {
-		ID             string `json:"ID"`
-		Color          string `json:"color"`
-		Size           int    `json:"size"`
-		Owner          string `json:"owner"`
-		AppraisedValue int    `json:"appraisedValue"`
-	}
-
-	asset := Asset{
-		ID:             "asset8",
-		Color:          "orange",
-		Size:           10,
-		Owner:          "Kmilo Denis Glez",
-		AppraisedValue: 100,
-	}
-	assetByte, _ := jsoniter.MarshalToString(asset)
+	// ReadAsset
+	fmt.Printf("\n--> Evaluate Transaction: ReadAsset %s\n", assetID)
+	result, err := contract.EvaluateTransaction("ReadAsset", assetID)
 	if err != nil {
-		log.Fatalf("Failed to MarshalToString: %v", err)
+		panic(err)
 	}
-	result, err = contract.SubmitTransaction("CreateAssetUsingStructParam", assetByte)
-	if err != nil {
-		log.Fatalf("Failed to Submit transaction: %v", err)
-	}
-
-	log.Println("--> Submit Transaction: CreateAsset, creates new asset with ID, color, owner, size, and appraisedValue arguments")
-	result, err = contract.SubmitTransaction("CreateAsset", "asset13", "yellow", "5", "Tom", "1300")
-	if err != nil {
-		log.Fatalf("Failed to Submit transaction: %v", err)
-	}
-	log.Println(string(result))
-
-	log.Println("--> Evaluate Transaction: ReadAsset, function returns an asset with a given assetID")
-	result, err = contract.EvaluateTransaction("ReadAsset", "asset13")
-	if err != nil {
-		log.Fatalf("Failed to evaluate transaction: %v\n", err)
-	}
-	log.Println(string(result))
-
-	log.Println("--> Evaluate Transaction: AssetExists, function returns 'true' if an asset with given assetID exist")
-	result, err = contract.EvaluateTransaction("AssetExists", "asset1")
-	if err != nil {
-		log.Fatalf("Failed to evaluate transaction: %v\n", err)
-	}
-	log.Println(string(result))
-
-	log.Println("--> Submit Transaction: TransferAsset asset1, transfer to new owner of Tom")
-	_, err = contract.SubmitTransaction("TransferAsset", "asset1", "Tom")
-	if err != nil {
-		log.Fatalf("Failed to Submit transaction: %v", err)
-	}
-
-	log.Println("--> Evaluate Transaction: ReadAsset, function returns 'asset1' attributes")
-	result, err = contract.EvaluateTransaction("ReadAsset", "asset1")
-	if err != nil {
-		log.Fatalf("Failed to evaluate transaction: %v", err)
-	}
-	log.Println(string(result))
-	log.Println("============ application-golang ends ============")
+	fmt.Println("*** ReadAsset result:\n", formatJSON(result))
 }
 
-func populateWallet(wallet *gateway.Wallet) error {
-	log.Println("============ Populating wallet ============")
-	credPath := filepath.Join(
-		"..",
-		"crypto-config",
-		"peerOrganizations",
-		"org1.example.com",
-		"users",
-		"Admin@org1.example.com",
-		"msp",
-	)
-
-	certPath := filepath.Join(credPath, "signcerts", "Admin@org1.example.com-cert.pem")
-	// read the certificate pem
-	cert, err := ioutil.ReadFile(filepath.Clean(certPath))
+// gRPC connection to peer
+func newGrpcConnection() *grpc.ClientConn {
+	certPEM, err := os.ReadFile(tlsCertPath)
 	if err != nil {
-		return err
+		panic(err)
 	}
-
-	keyDir := filepath.Join(credPath, "keystore")
-	// there's a single file in this dir containing the private key
-	files, err := ioutil.ReadDir(keyDir)
+	cert, err := identity.CertificateFromPEM(certPEM)
 	if err != nil {
-		return err
+		panic(err)
 	}
-	if len(files) != 1 {
-		return fmt.Errorf("keystore folder should have contain one file")
-	}
-	keyPath := filepath.Join(keyDir, files[0].Name())
-	key, err := ioutil.ReadFile(filepath.Clean(keyPath))
+
+	certPool := x509.NewCertPool()
+	certPool.AddCert(cert)
+	creds := credentials.NewClientTLSFromCert(certPool, gatewayPeer)
+
+	conn, err := grpc.Dial(peerEndpoint, grpc.WithTransportCredentials(creds))
 	if err != nil {
-		return err
+		panic(err)
 	}
+	return conn
+}
 
-	identity := gateway.NewX509Identity("Org1MSP", string(cert), string(key))
+// Identity from Admin
+func newIdentity() *identity.X509Identity {
+	certPEM, err := readFirstFile(certPath)
+	if err != nil {
+		panic(err)
+	}
+	cert, err := identity.CertificateFromPEM(certPEM)
+	if err != nil {
+		panic(err)
+	}
+	id, err := identity.NewX509Identity(mspID, cert)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
 
-	return wallet.Put("appUser", identity)
+// Sign function from Admin key
+func newSign() identity.Sign {
+	keyPEM, err := readFirstFile(keyPath)
+	if err != nil {
+		panic(err)
+	}
+	privateKey, err := identity.PrivateKeyFromPEM(keyPEM)
+	if err != nil {
+		panic(err)
+	}
+	sign, err := identity.NewPrivateKeySign(privateKey)
+	if err != nil {
+		panic(err)
+	}
+	return sign
+}
+
+// Read first file in folder
+func readFirstFile(dir string) ([]byte, error) {
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
+	if len(files) == 0 {
+		return nil, fmt.Errorf("no files found in %s", dir)
+	}
+	return os.ReadFile(path.Join(dir, files[0].Name()))
+}
+
+// Pretty print JSON
+func formatJSON(data []byte) string {
+	var out bytes.Buffer
+	if err := json.Indent(&out, data, "", "  "); err != nil {
+		return string(data)
+	}
+	return out.String()
 }
