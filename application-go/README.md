@@ -111,12 +111,6 @@ El chaincode (`cc-assettransfer-go`) implementa funciones que corresponden a las
 ## Ejecutando la Aplicación
 
 1. **Levantar la red de prueba**
-
-   ```bash
-   cd fabric-testnet-nano-without-syschannel
-   ./network.sh up
-   ```
-
    > Consulte el README de `fabric-testnet-nano-without-syschannel` para detalles de configuración.
 
 2. **Ejecutar la aplicación cliente**
