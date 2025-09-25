@@ -19,7 +19,7 @@ curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/ins
 
 Run the script:
 ```bash
-./install-fabric.sh -f 2.4.6 b
+./install-fabric.sh --fabric-version 2.5.12 b
 ```
 > **NOTE**: These arguments download the `Fabric binaries`.
 
