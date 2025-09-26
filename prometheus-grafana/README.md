@@ -9,14 +9,13 @@ You will need to have installed **docker-compose with version 1.29 or above** (n
 
 ## How to use
 
-1. Go to the test-network directory and run bring up the test-network **./network.sh up createChannel**
-2. Bring up the Prometheus/Grafana network in the test-network/prometheus-grafana directory and run **docker-compose up -d**
+1. Go to the [fabric-testnet-nano-without-syschannel](../) directory and follow instructions in README.md to run bring up the network
+2. Bring up the Prometheus/Grafana network in the fabric-testnet-nano-without-syschannel/prometheus-grafana directory and run **docker-compose up -d**
 3. Log in: type "localhost:3000" on your web browser -> username="admin", password="admin" -> set a new password
 4. Browse dashboard and analyse results
    - The default dashboard "HLF Performances Review" can be found and displayed by hovering over the dashboard menu and clicking on the browse button.
-   ![picture alt]("https://user-images.githubusercontent.com/86831094/149115445-5e5f6d95-ecc3-4b46-aadb-5c01148770b3.png "Title is optional")
    Once opened the dashboard, to display the collected metrics and data, adjust the timeframe on the top right to focus on the latest timespan when the network was up.
-5. Deploy a chaincode (i.e. "./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go"), start using the test-network and use the Grafana dashboard to analyse and assess your network performances.
+5. Deploy a chaincode, start using the network and use the Grafana dashboard to analyse and assess your network performances.
 Extras: add new queries, modify dashboard & add relevant changes to main repo --> extract json and add it to "Grafana/dashboards/hlf-performances.json".
 Metrics can also be displayed directly from Prometheus by going to "localhost:9090".
 
@@ -35,9 +34,9 @@ Brings up
 
 Fabric metrics targets:
 
-- `peer0.org1.example.com:9444`
-- `peer0.org2.example.com:9445`
-- `orderer.example.com:9443`
+- ordere1: `localhost:8443`
+- peer1:   `localhost:8446`
+- peer2:   `localhost:8448`
 
 System and docker metrics targets:
 
