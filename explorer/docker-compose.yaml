@@ -10,7 +10,7 @@ services:
   explorerdb.example.com:
 #    image: hyperledger/explorer-db:latest
     image: ghcr.io/hyperledger-labs/explorer-db:latest
-    container_name: explorer.example.com
+    container_name: explorerdb.example.com
     hostname: explorerdb.example.com
     environment:
       - DATABASE_DATABASE=fabricexplorer
